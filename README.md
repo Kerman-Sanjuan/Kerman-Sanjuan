@@ -1,4 +1,4 @@
-<a href="https://k3rman.com"><img src="assets/header.svg" width="100%" alt="Cloud, platforms and the agents that run them. azure · terraform · kubernetes · a home lab that never stops."></a>
+<a href="https://k3rman.com"><img src="assets/hero.svg" width="100%" alt="Cloud, platforms and the agents that run them. azure · terraform · kubernetes · a home lab that never stops."></a>
 
 <p align="center">
   <a href="https://www.linkedin.com/in/kerman-sanjuan/"><img src="assets/buttons/linkedin.svg" height="38" alt="LinkedIn"></a>&nbsp;
