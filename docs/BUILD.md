@@ -64,6 +64,28 @@ The terminal accent is `#fe8019` instead of `#af3a03`, because on charcoal the
 dark orange does not read and the light one does. Same rule as the theme: the
 accent has one value per mode.
 
+## The daily workflow
+
+`docs/workflow-profile.yml` is the workflow that keeps the terminal current: it
+runs at 06:23 UTC, lets `Platane/snk` draw the snake in both palettes, frames it
+with `terminal.py` and publishes `terminal.svg` to the `output` branch, which is
+where the README loads it from.
+
+It lives in `docs/` rather than in `.github/workflows/` because pushing a
+workflow needs the `workflow` OAuth scope and the token used here does not have
+it. Move the file to `.github/workflows/profile.yml` from the GitHub web UI (or
+with a token that carries that scope) and the profile starts updating itself.
+
+Until then, the terminal in the `output` branch was rendered locally with the
+same code:
+
+```sh
+git clone https://github.com/Platane/snk && cd snk && npm install
+# a small .mts script calling generateSnakeAnimation + parseOutputsOption,
+# with GITHUB_TOKEN exported
+python scripts/terminal.py --snake dist/snake-dark.svg --out dist/terminal.svg
+```
+
 ## Things that bite
 
 - **Quotes inside `style="font:..."`.** A family with a space needs a quote, and

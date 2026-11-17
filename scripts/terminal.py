@@ -61,6 +61,9 @@ def snake_block(s: Session, path: Path | None, x: float, y: float, width: float,
     src = path.read_text(encoding="utf-8")
     m = re.match(r'\s*<svg([^>]*)>(.*)</svg>\s*$', src, re.S)
     attrs, inner = m.group(1), m.group(2)
+    # The snake draws a floor under the grid (the .u rects). On gruvbox charcoal it
+    # reads as a grey bar, so it goes; the body of the snake is all we want.
+    inner = re.sub(r'<rect class="u[^"]*"[^>]*/>', "", inner)
     vb = re.search(r'viewBox="([^"]+)"', attrs).group(1)
     vw, vh = (float(v) for v in vb.split()[2:4])
     height = width * vh / vw
