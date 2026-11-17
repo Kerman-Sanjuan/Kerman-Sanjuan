@@ -6,7 +6,7 @@ through `<img>` keeps its own stylesheet, its `@font-face` and its SMIL
 animations. So the README is a thin layer of links around images.
 
 ```
-profile.json ──▶ scripts/build.py ──▶ assets/header.svg
+profile.json ──▶ scripts/build.py ──▶ assets/hero.svg
                                     assets/buttons/*.svg
                                     assets/cards/*.svg
                                     README.md
@@ -19,10 +19,18 @@ GitHub Actions (daily) ──▶ Platane/snk ──▶ scripts/terminal.py ─�
 
 | Piece | What it is | Rebuilt |
 |---|---|---|
-| `header.svg` | Paper gradient, the faint grid from platform.k3rman.com, a mono eyebrow, the headline typed character by character and the portrait in a circle | when you run the build |
+| `hero.svg` | Paper gradient, the faint grid from platform.k3rman.com, a mono eyebrow and the headline typed character by character | when you run the build |
 | `buttons/*.svg` | One pill per link, drawn instead of a shields.io badge so the label uses IBM Plex and the corners are actually round | when you run the build |
 | `cards/*.svg` | Highlights: a typographic panel, a title, a short body, a label and a pill | when you run the build |
 | `output/terminal.svg` | A charcoal terminal holding the contribution snake and the tool icons | every day, by the workflow |
+
+## The banner has two layouts
+
+`header.photo` in `profile.json` decides both. With a portrait the banner is
+1100x280, the headline is 44px and the right-hand column belongs to the face.
+Without one it is 1100x262 and 56px: the type carries the whole width and the
+right half is left as air. `layout()` in `scripts/header.py` is the only place
+that knows the difference.
 
 ## Build it
 
