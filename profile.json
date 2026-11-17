@@ -1,0 +1,144 @@
+{
+  "github_username": "Kerman-Sanjuan",
+
+  "palette": {
+    "ink": "#3c3836",
+    "accent": "#af3a03",
+    "muted": "#665c54",
+    "on_accent": "#fdfaed",
+    "paper": "#fbf1c7",
+    "eyebrow": "#3d6f4f",
+    "header": {
+      "paper_gradient": ["#f2e5bc", "#fbf1c7"],
+      "grid": "#e3d7ae",
+      "photo_fade": "#ebdbb2",
+      "ring": "#c9b98c"
+    },
+    "terminal": {
+      "background": "#282828",
+      "border": "#3c3836",
+      "title_bar": "#32302f",
+      "output": "#d5c4a1",
+      "title": "#a89984",
+      "prompt": "#fe8019",
+      "command": "#ebdbb2",
+      "icons": "#8ec07c"
+    },
+    "cards": {
+      "background": "#282828",
+      "border": "#3c3836",
+      "title": "#fbf1c7",
+      "body": "#d5c4a1",
+      "label": "#fe8019",
+      "pill": "#ebdbb2",
+      "pill_text": "#282828",
+      "panel": "#32302f",
+      "panel_note": "#a89984"
+    },
+    "snake": {
+      "light": {"snake": "#af3a03", "dots": ["#f8efcd", "#f2e5bc", "#d8c79b", "#bdae93", "#a89984"]},
+      "dark": {"snake": "#fe8019", "dots": ["#32302f", "#3c3836", "#665c1e", "#98971a", "#b8bb26"]}
+    }
+  },
+
+  "fonts": {
+    "sans": {"family": "IBM Plex Sans", "file": "fonts/ibm-plex-sans-var.woff2"},
+    "mono": {"family": "IBM Plex Mono", "file": "fonts/ibm-plex-mono-400.woff2"}
+  },
+
+  "header": {
+    "file": "header",
+    "link": "https://k3rman.com",
+    "eyebrow": "CLOUD ENGINEER · PLAIN CONCEPTS · BILBAO",
+    "headline": [
+      [{"text": "Cloud, platforms and"}],
+      [{"text": "the "}, {"text": "agents", "color": "accent"}, {"text": " that run them."}]
+    ],
+    "title": "azure · terraform · kubernetes · a home lab that never stops",
+    "photo": {
+      "path": "docs/portrait-source.jpeg",
+      "width": 184
+    }
+  },
+
+  "buttons": [
+    {"file": "linkedin", "label": "LinkedIn", "icon": "linkedin", "url": "https://www.linkedin.com/in/kerman-sanjuan/"},
+    {"file": "website", "label": "k3rman.com", "icon": "globe", "url": "https://k3rman.com"},
+    {"file": "platform", "label": "platform", "icon": "globe", "url": "https://platform.k3rman.com"},
+    {"file": "projects", "label": "Projects", "icon": "grid", "url": "https://github.com/Kerman-Sanjuan?tab=repositories&type=source"}
+  ],
+
+  "terminal": {
+    "window_title": "kerman@homelab: ~",
+    "prompt": "kerman@homelab ~ $ ",
+    "contributions": {
+      "command": "contributions --last-year",
+      "caption": "Each square is a day of GitHub contributions."
+    },
+    "tools_command": "tools",
+    "tools": [
+      {"slug": "microsoftazure", "name": "Azure"},
+      {"slug": "terraform", "name": "Terraform"},
+      {"slug": "kubernetes", "name": "Kubernetes"},
+      {"slug": "argo", "name": "Argo CD"},
+      {"slug": "helm", "name": "Helm"},
+      {"slug": "docker", "name": "Docker"},
+      {"slug": "go", "name": "Go"},
+      {"slug": "python", "name": "Python"},
+      {"slug": "githubactions", "name": "Actions"},
+      {"slug": "ansible", "name": "Ansible"},
+      {"slug": "proxmox", "name": "Proxmox"},
+      {"slug": "homeassistant", "name": "Home Assistant"},
+      {"slug": "linux", "name": "Linux"},
+      {"slug": "neovim", "name": "Neovim"}
+    ],
+    "link": "https://github.com/Kerman-Sanjuan?tab=repositories",
+    "alt": "Terminal: this year's GitHub contributions as a snake animation, each square a day of contributions; then the tools I use: {tools}."
+  },
+
+  "cards": {
+    "heading": "Highlights",
+    "items": [
+      {
+        "file": "platform",
+        "panel": {"headline": "platform", "note": "33 tokens · wcag aa"},
+        "title": "An internal platform for one person",
+        "body": "The baseline I build software with: a gruvbox theme, the conventions written down, and the phases an idea goes through before it ships.",
+        "label": "platform.k3rman.com",
+        "button": "Read the docs",
+        "url": "https://platform.k3rman.com",
+        "alt": "An internal platform for one person: the theme, the conventions and the phases."
+      },
+      {
+        "file": "octospec",
+        "panel": {"headline": "octospec", "note": "go · github native"},
+        "title": "Issues as the backlog, repo files as the machine layer",
+        "body": "OpenSpec made native to GitHub. No external CLI, no second source of truth: the seed hands its CI to whoever consumes it.",
+        "label": "Open source · Go",
+        "button": "See the repository",
+        "url": "https://github.com/Kerman-Sanjuan/octospec",
+        "alt": "octospec: GitHub-native OpenSpec, written in Go."
+      },
+      {
+        "file": "agentic-workflow",
+        "panel": {"headline": "agentic", "note": "workflows · gates"},
+        "title": "Building an agentic workflow from zero",
+        "body": "I built my own workflow tool in four days, mostly to learn, and it changed how I spend my time: most of my work now is deciding what goes in.",
+        "label": "Post · October 2026",
+        "button": "Read the post",
+        "url": "https://k3rman.com/posts/from-implementing-to-deciding/",
+        "alt": "Post: my experience building an agentic workflow from zero."
+      },
+      {
+        "file": "honcho",
+        "panel": {"headline": "honcho", "note": "proxmox · local gpu"},
+        "title": "Self-hosting Honcho with a local GPU in an LXC",
+        "body": "The memory server for agents, running at home on Proxmox with the embeddings on a local GPU. No cloud, and no per-token bill.",
+        "label": "Post · August 2026",
+        "button": "Read the post",
+        "url": "https://k3rman.com/posts/self-hosting-honcho-gpu-lxc-proxmox/",
+        "alt": "Post: self-hosting Honcho with a local GPU in an LXC on Proxmox."
+      }
+    ]
+  }
+}

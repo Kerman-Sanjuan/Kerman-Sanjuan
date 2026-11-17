@@ -1,0 +1,22 @@
+# Notice
+
+This repository is a derivative of **github-profile-kit** by Jon Andoni Baranda
+(https://github.com/jandoni/github-profile-kit), released under the MIT License.
+
+The generator scripts (`header.py`, `buttons.py`, `terminal.py`, `cards.py`,
+`build.py`, `preview.py`, `kit.py`, `fetch_icons.py`), the README template and
+the daily workflow follow that kit's structure. Changes made here:
+
+- The palette is Kerman's own gruvbox theme (`@k3rman/ui-theme`), not the
+  original warm-paper one.
+- The header is rebuilt: a mono eyebrow, a paper grid, IBM Plex embedded via
+  `@font-face`, and the portrait cut into a circle instead of a rectangular
+  fade.
+- IBM Plex Sans / IBM Plex Mono are embedded in every SVG. The font files in
+  `fonts/` are redistributed under the SIL Open Font License 1.1
+  (`fonts/LICENSE.txt`).
+- The terminal renders on gruvbox charcoal and uses the dark snake palette.
+- Card panels set the project name in mono instead of serif italic.
+
+Tool icons come from Simple Icons (CC0-1.0). The GitHub and LinkedIn marks are
+used nominatively to link to their own sites.
