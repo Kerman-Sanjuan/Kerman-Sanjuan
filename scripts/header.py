@@ -17,12 +17,12 @@ from pathlib import Path
 from kit import (ROOT, attr, colour, esc, font_face, jpeg_b64, load_config,
                  reduced_motion_css, resolve, warn, write)
 
-# Layout. Two headline lines of about 30 characters fit next to the portrait.
-W, H = 1100, 280
-TEXT_X, EYEBROW_BASELINE = 62, 78
-FIRST_BASELINE, LINE_HEIGHT, TITLE_GAP = 134, 54, 46
+# Layout. Two headline lines of about 30 characters each fit next to the portrait.
+W = 1100
+H_WITH_PHOTO = 280
+TEXT_X = 62
+LINE_HEIGHT = 54
 EYEBROW_FONT = "11.5px IBM_PLEX_MONO_PLACEHOLDER"
-HEADLINE_FONT = "44px IBM_PLEX_SANS_PLACEHOLDER"
 TITLE_FONT = "12.5px IBM_PLEX_MONO_PLACEHOLDER"
 TITLE_CHAR_W = 7.95       # 12.5px mono advance (7.5) plus the .4 letter-spacing: one step of the typing clip
 PHOTO_SCALE, PHOTO_QUALITY = 3, 82
@@ -32,6 +32,17 @@ TITLE_CLIP = '[clip-path^="url(#rc"]'               # removed under reduced moti
 
 SANS_FALLBACK = "-apple-system,'Segoe UI',Helvetica,Arial,sans-serif"
 MONO_FALLBACK = "Menlo,Consolas,monospace"
+
+
+def layout(cfg: dict) -> dict:
+    """Vertical rhythm. Without a portrait the banner loses its right-hand column,
+    so it also gives back 30px of height and the headline grows a little: one
+    column of type needs a different proportion than type plus a face."""
+    if (cfg["header"].get("photo") or {}).get("path"):
+        return {"h": H_WITH_PHOTO, "eyebrow": 78, "first": 134, "headline": 44, "line": LINE_HEIGHT, "gap": 46}
+    # No portrait: the type has to carry the banner alone, so it is larger and the
+    # right half is left as air rather than filled with something decorative.
+    return {"h": 262, "eyebrow": 74, "first": 140, "headline": 56, "line": 64, "gap": 44}
 
 
 def words(cfg: dict) -> list[list[tuple[str, str, bool]]]:
@@ -59,7 +70,7 @@ def fonts_css(cfg: dict) -> tuple[str, str, str]:
             f"{mono},{MONO_FALLBACK}" if mono else MONO_FALLBACK)
 
 
-def portrait(cfg: dict) -> tuple[str, str]:
+def portrait(cfg: dict, lay: dict) -> tuple[str, str]:
     """The photo, cropped square, cut into a circle with a hairline ring.
     Returns (defs, body): the clip path belongs in <defs>, the group on the canvas."""
     p = cfg["header"].get("photo") or {}
@@ -71,7 +82,7 @@ def portrait(cfg: dict) -> tuple[str, str]:
         warn(f"header photo not found ({path}); building the header without it")
         return "", ""
     r = diameter / 2
-    cx, cy = W - 62 - r, H / 2
+    cx, cy = W - 62 - r, lay["h"] / 2
     b64 = jpeg_b64(path, (diameter * PHOTO_SCALE, diameter * PHOTO_SCALE), PHOTO_QUALITY)
     ring = cfg["palette"].get("header", {}).get("ring", "#c9b98c")
     defs = f'<clipPath id="face"><circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}"/></clipPath>'
@@ -85,46 +96,48 @@ def portrait(cfg: dict) -> tuple[str, str]:
     return defs, body
 
 
-def grid(cfg: dict) -> str:
+def grid(cfg: dict, lay: dict) -> str:
     """The whisper-quiet paper grid from platform.k3rman.com."""
     line = cfg["palette"].get("header", {}).get("grid", "#e3d7ae")
-    vertical = "".join(f"M{x} {EYEBROW_BASELINE - 16}V{H}" for x in range(GRID_STEP, W, GRID_STEP))
-    horizontal = "".join(f"M0 {y}H{W}" for y in range(GRID_STEP, H, GRID_STEP))
+    vertical = "".join(f"M{x} {lay['eyebrow'] - 16}V{lay['h']}" for x in range(GRID_STEP, W, GRID_STEP))
+    horizontal = "".join(f"M0 {y}H{W}" for y in range(GRID_STEP, lay["h"], GRID_STEP))
     return (f'<path d="{vertical}{horizontal}" stroke="{line}" stroke-width="1" fill="none" opacity=".75"/>')
 
 
 def render(cfg: dict) -> str:
     h = cfg["header"]
+    lay = layout(cfg)
+    height, eyebrow_y, first_y, line_h, title_gap = lay["h"], lay["eyebrow"], lay["first"], lay["line"], lay["gap"]
     hp = cfg["palette"].get("header", {})
     left, right = hp.get("paper_gradient", ["#f2e5bc", "#fbf1c7"])
     fonts, sans, mono = fonts_css(cfg)
-    headline_font = HEADLINE_FONT.replace("IBM_PLEX_SANS_PLACEHOLDER", sans)
+    headline_font = f"{lay['headline']}px {sans}"
     eyebrow_font = EYEBROW_FONT.replace("IBM_PLEX_MONO_PLACEHOLDER", mono)
     title_font = TITLE_FONT.replace("IBM_PLEX_MONO_PLACEHOLDER", mono)
     eyebrow_colour = colour(cfg, "eyebrow", "muted")
-    photo_defs, photo_body = portrait(cfg)
+    photo_defs, photo_body = portrait(cfg, lay)
 
     parts = [
         '<defs>'
         f'<linearGradient id="pg" x1="0" x2="1"><stop offset="0" stop-color="{left}"/><stop offset="1" stop-color="{right}"/></linearGradient>'
-        f'<clipPath id="r"><rect width="{W}" height="{H}" rx="12"/></clipPath>'
+        f'<clipPath id="r"><rect width="{W}" height="{height}" rx="12"/></clipPath>'
         f'{photo_defs}'
         '</defs>',
         f'<style>{fonts}{reduced_motion_css(TITLE_CLIP)}.eyebrow{{letter-spacing:2.6px}}</style>',
-        f'<g clip-path="url(#r)"><rect width="{W}" height="{H}" fill="url(#pg)"/>{grid(cfg)}{photo_body}</g>',
+        f'<g clip-path="url(#r)"><rect width="{W}" height="{height}" fill="url(#pg)"/>{grid(cfg, lay)}{photo_body}</g>',
     ]
 
     # The eyebrow: small, mono, tracked out, sage. It labels the headline.
     eyebrow = h.get("eyebrow")
     if eyebrow:
-        parts.append(f'<text class="eyebrow" x="{TEXT_X}" y="{EYEBROW_BASELINE}" '
+        parts.append(f'<text class="eyebrow" x="{TEXT_X}" y="{eyebrow_y}" '
                      f'style="font:{eyebrow_font}" fill="{eyebrow_colour}" opacity="0">{esc(eyebrow.upper())}'
                      f'<animate attributeName="opacity" from="0" to="1" begin="0.15s" dur="0.9s" fill="freeze"/></text>')
 
     # Type the headline one character at a time: each character is a <tspan> that a
     # <set> reveals, so proportional fonts never show half a letter.
     t = START
-    y = FIRST_BASELINE
+    y = first_y
     for line in words(cfg):
         spans = []
         for wi, (word, fill, italic) in enumerate(line):
@@ -134,17 +147,17 @@ def render(cfg: dict) -> str:
                 t += PER_CHAR
         parts.append(f'<text x="{TEXT_X}" y="{y}" xml:space="preserve" style="font:{headline_font}">{"".join(spans)}</text>')
         t += LINE_PAUSE
-        y += LINE_HEIGHT
+        y += line_h
 
     # The title types out behind a clip that widens in steps of one average character.
     title = h["title"]
-    ty = y - LINE_HEIGHT + TITLE_GAP
+    ty = y - line_h + title_gap
     steps = ";".join(f"{j * TITLE_CHAR_W:.1f}" for j in range(len(title) + 1))
     parts.append(f'<clipPath id="rc"><rect x="{TEXT_X}" y="{ty - 16}" height="22" width="0">'
                  f'<animate attributeName="width" values="{steps}" calcMode="discrete" begin="{t + .25:.2f}s" dur="1.5s" fill="freeze"/></rect></clipPath>'
                  f'<g clip-path="url(#rc)"><text x="{TEXT_X}" y="{ty}" style="font:{title_font}" '
                  f'fill="{colour(cfg, "muted")}" letter-spacing=".4">{esc(title)}</text></g>')
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" '
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{height}" viewBox="0 0 {W} {height}" role="img" '
             f'aria-label="{attr(alt_text(cfg))}">' + "".join(parts) + "</svg>\n")
 
 

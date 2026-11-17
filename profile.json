@@ -54,11 +54,7 @@
       [{"text": "Cloud, platforms and"}],
       [{"text": "the "}, {"text": "agents", "color": "accent"}, {"text": " that run them."}]
     ],
-    "title": "azure · terraform · kubernetes · a home lab that never stops",
-    "photo": {
-      "path": "docs/portrait-source.jpeg",
-      "width": 184
-    }
+    "title": "azure · terraform · kubernetes · a home lab that never stops"
   },
 
   "buttons": [
